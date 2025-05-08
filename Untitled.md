@@ -11,4 +11,4 @@
 - [x] 📅 2025-05-15 ✅ 2025-05-08
 
 ## Papers discussed
-- ![[TANGLED INTERACTIVE PROOFS 1.pdf]]
+- [[02_Literature/TANGLED INTERACTIVE PROOFS.pdf]]
