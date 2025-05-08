@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Task Dashboard.md",
+                "file": "Untitled.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Task Dashboard"
+              "title": "Untitled"
             }
           }
         ]
@@ -183,8 +183,8 @@
   "active": "cc1bf6282a1ae589",
   "lastOpenFiles": [
     "Task Dashboard.md",
-    "README.md",
     "Untitled.md",
+    "README.md",
     "Weekly Review Template.md",
     "04_Templates/Untitled.md",
     "04_Templates/meeting.tpl.md",
