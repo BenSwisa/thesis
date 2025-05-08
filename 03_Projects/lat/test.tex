@@ -1,0 +1,481 @@
+% !TeX program = pdflatex
+
+\documentclass[12pt,a4paper,oneside,onecolumn]{book}
+
+\usepackage{libertine}
+\usepackage{courier}
+\usepackage[utf8x]{inputenc}
+\usepackage[hebrew,english]{babel}
+\usepackage[longnamesfirst,square,numbers,comma,sort&compress]{natbib}
+\usepackage{titlesec}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{mathpazo}
+\usepackage{datetime}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{booktabs} % For professional looking tables
+\usepackage{natbib}
+\usepackage{pdfpages}
+% \usepackage[natbibapa]{apacite}  % Load the apacite package with natbib compatibility
+
+% \renewcommand{\bibsection}{\section*{References}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+
+\titleformat{\chapter}[hang]{\bf\huge}{\thechapter}{2pc}{}
+\title{Final-Project Report}
+
+\begin{document}
+
+\include{cover}
+% \include{cover_heb}
+% \include{cover_sig}
+
+\frontmatter
+% \includepdf{figs\s.pdf}
+% \includegraphics[scale=0.75]{figs/s.pdf}
+% \include{abstract_heb}
+\include{abstract}
+% \include{acknowledgements}
+
+\Large \textbf{Project 24-165 Review} 
+\normalsize
+
+The final project titled **"Ground Normals Estimation from Depth Images"** by Ben Swisa from Ben-Gurion University of the Negev addresses a significant challenge in the field of robotics: precise environmental perception for efficient navigation and obstacle avoidance. The project introduces an innovative method to estimate ground normals using depth images captured by stereo cameras. Given the inherent non-linearity in depth image noise, which increases quadratically with distance, Ben employed recursive least squares (RLS) to iteratively refine the estimation of ground normals. Additionally, he applied covariance intersection (CI) to integrate information from adjacent ground segments, assuming the ground is continuous. This approach significantly enhances the accuracy and reliability of ground normal estimations, improving a robot's adaptability and safety in dynamic environments.
+
+Over the course of the project, Ben demonstrated his solution's effectiveness through two semesters of rigorous testing and refinement. In the first semester, the RLS algorithm successfully estimated ground normals, though minor discrepancies were observed due to the challenges posed by the continuity of the ground surface. The second semester focused on addressing these issues by incorporating CI, which resulted in smoother transitions between neighboring vectors and a substantial improvement in overall accuracy. Furthermore, Ben optimized the algorithm to achieve a runtime of 15ms, making it suitable for real-time applications in robotics.
+
+Ben Swisa, a dedicated and diligent student, has shown remarkable commitment to his project. Under the supervision of Dr. Or Tslil, Ben not only tackled complex mathematical and computational challenges but also displayed a deep understanding of the practical implications of his work. His ability to combine theoretical knowledge with practical application, along with his continuous pursuit of excellence, has been evident throughout the project. Ben's hard work, innovative thinking, and passion for robotics have made this project a success, reflecting his potential as a future leader in the field.
+
+\includegraphics[scale=0.4]{figs/autograph.png}
+
+
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\mainmatter
+
+
+
+
+\chapter{Introduction}
+Robotic systems are increasingly deployed in a variety of environments, from industrial settings to natural terrains, where they perform tasks ranging from routine inspections to complex interactions with their surroundings. A fundamental challenge in these applications is the robot's ability to accurately perceive and interpret its environment, particularly the ground surface, which is crucial for safe navigation and efficient operation\cite{example2024}. 
+
+Depth sensors are integral to the field of robotics, providing 3D spatial information about the environment that is essential for a range of applications including navigation, object detection, and scene reconstruction. These sensors can be broadly categorized into several types, each with distinct operating principles and noise characteristics. 
+
+
+- \underline{Stereo Depth Cameras:} These sensors estimate depth by comparing two or more images taken from slightly different viewpoints. Depth is calculated using triangulation methods. The primary source of noise in stereo vision is the uncertainty in matching corresponding points between images, which increases with distance and decreases with texture richness in the scene. These are the sensors that I will focus on this project. 
+\\[1em]
+- \underline{Structured Light Sensors:} These sensors project a known pattern of light onto the scene and observe the deformation of this pattern to estimate depth. Common examples include the Microsoft Kinect. Noise in structured light sensors arises from reflections, absorptive surfaces, and ambient light interference, often leading to inaccuracies in depth estimation at greater distances. 
+\\[1em]
+- \underline{Time-of-Flight (ToF) Cameras:} ToF cameras measure the time it takes for emitted light to return after reflecting off objects in the scene. The primary noise factors for ToF cameras are ambient light, surface reflectivity, and multi-path interference, where light bounces off multiple surfaces before returning to the sensor. 
+\\[1em]
+- \underline{LIDAR (Light Detection and Ranging):} LIDAR systems use laser pulses to measure distances. The noise in LIDAR is primarily due to atmospheric conditions, surface reflectivity, and sensor resolution. LIDAR is highly accurate at long distances but can be affected by environmental factors like rain or fog. 
+
+
+
+
+% \vspace{1cm}
+
+
+This project will Focus on Stereo Depth Cameras.
+The noise model for a stereo depth camera, is based on the understanding that the standard deviation of noise in the estimated depth varies quadratically with the distance of the object from the camera. This means that as the distance from the camera to the object increases, the noise in the depth measurement increases quadratically. 
+
+In more detail: 
+
+    For a structured-light stereo depth camera, the noise in depth measurements, represented as the standard deviation, is proportional to the square of the actual distance $Z$ of the object from the camera. Mathematically, if $Z_0$  is the actual depth and $n$ is the noise, the relationship can be expressed as: 
+\\[1em]
+$Z=Z_0+\frac{Z_0^2}{fB}n$
+\\[1em]
+where $f$ is the focal length and $B$ is the baseline distance between the optical centers of the camera and the projector. 
+\\[1em]
+Cause of Noise: The dominant source of noise in such depth measurements is quantization noise, which arises due to finite precision in disparity estimation. This noise remains constant across all disparity values but impacts the depth estimate more significantly at larger distances. 
+The interpretation of this data is complicated by the inherent non-linearity of the noise, leading to erroneous interpretations of the terrain and potentially unsafe actions by the robot. 
+To address this challenge, this project develops a robust method for estimating normals to the ground using depth images. By leveraging the recursive least squares technique, our approach iteratively refines the estimation of normals, effectively adapting to the noise characteristics of the depth data. Additionally, the application of covariance intersection allows for the integration of information from adjacent ground segments. This is predicated on the assumption that the ground is a continuous surface, enabling a more consistent and accurate flow of information across different segments of the ground. 
+
+
+
+ 
+
+
+% Afterward, the report will delve into the research hypotheses and methodologies, followed by an analysis of the new algorithm and its corresponding results. This will lead to a comprehensive discussion of the results, including conclusions and economic evaluations. The summary section will capture all the presented work, finishing with future works. 
+
+% \section{ndfsdf}
+% \subsection{wdfw}
+% \subsubsection{dwfd}
+
+
+\chapter{Least Squares Estimator}
+
+The least squares estimator is a fundamental statistical method used for estimating the parameters of a model. It is particularly applicable in linear regression, where the goal is to find the best-fitting line---or more generally, a hyperplane---in a multidimensional space that minimizes the sum of the squared differences between the observed values and the values predicted by the model.
+
+\section{Mathematical Formulation}
+
+Let \( \mathbf{y} \) be a vector of observed values and \( \mathbf{X} \) be a matrix containing the corresponding predictor variables. The model can be represented as:
+\[ \mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}, \]
+where \( \boldsymbol{\beta} \) are the parameters to be estimated and \( \boldsymbol{\epsilon} \) is the vector of errors.
+
+The least squares estimator \( \hat{\boldsymbol{\beta}} \) minimizes the sum of squared residuals:
+\[ S(\boldsymbol{\beta}) = \sum_{i=1}^n (y_i - \mathbf{x}_i^T \boldsymbol{\beta})^2 = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^T (\mathbf{y} - \mathbf{X}\boldsymbol{\beta}). \]
+The solution to this minimization problem is given by:
+\[ \hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}, \]
+assuming \( \mathbf{X}^T\mathbf{X} \) is invertible.
+
+\section{Properties}
+
+The least squares estimator is unbiased when the errors \( \boldsymbol{\epsilon} \) have an expected value of zero. It is also the Best Linear Unbiased Estimator (BLUE) under the assumptions of the Gauss-Markov theorem, which requires the errors to be homoscedastic (constant variance) and uncorrelated.
+
+\subsection{Applications}
+
+The least squares method is extensively used in data fitting, forecasting, and any scenario requiring the calibration of a linear model. It's a cornerstone technique in fields ranging from econometrics and finance to engineering, natural sciences and robotics.
+
+\subsection{Recursive Least Squares}
+
+Recursive Least Squares (RLS) is an adaptive filter algorithm that recursively finds the coefficients that minimize a weighted linear least squares cost function relating to the input signals. This algorithm is particularly useful in scenarios where the underlying model dynamics are slowly varying. RLS can adapt to changes in the underlying model and is capable of processing data in real-time.
+
+\subsubsection{Formulation}
+
+RLS estimates the parameters of a linear regression model in a recursive manner, making it suitable for time-varying systems. The algorithm starts with initial estimates for the parameters and error covariance and updates these estimates as new data arrives.
+
+Given the parameter estimate \( \hat{\boldsymbol{\beta}}_{n-1} \) at time \( n-1 \), the update equations for RLS are:
+\[ \hat{\boldsymbol{\beta}}_n = \hat{\boldsymbol{\beta}}_{n-1} + \mathbf{K}_n (\mathbf{y}_n - \mathbf{X}_n \hat{\boldsymbol{\beta}}_{n-1}), \]
+where \( \mathbf{K}_n \) is the gain matrix calculated at each step based on the previous error covariance.
+
+\subsubsection{Advantages}
+
+The primary advantage of RLS is its ability to efficiently update the estimates of the parameters as new data becomes available, without requiring re-processing of all previous data. This makes RLS particularly appealing in real-time applications where it is impractical to store and reprocess large amounts of data.
+
+
+
+\chapter{Covariance Intersection}
+
+Covariance Intersection (CI) is an advanced technique in the field of data fusion used to estimate the state of a system from multiple uncertain sources. This method is particularly effective when the statistical dependence between sources is unknown or uncharacterized, allowing for a conservative estimation that guarantees consistency.
+
+\section{Mathematical Formulation}
+
+Consider two estimates \( \hat{x}_1 \) and \( \hat{x}_2 \) with their corresponding covariance matrices \( P_1 \) and \( P_2 \). The Covariance Intersection method provides a combined estimate \( \hat{x} \) and a covariance \( P \) without assuming any correlation between the estimates. The combined estimate \( \hat{x} \) is found by minimizing the trace (or other scalar functions of) the fused covariance \( P \):
+\[ \hat{x} = (1 - \omega) \hat{x}_1 + \omega \hat{x}_2, \]
+where \( \omega \) is a weight factor chosen to minimize:
+\[ P = ((1 - \omega)P_1^{-1} + \omega P_2^{-1})^{-1}. \]
+
+The optimal \( \omega \) is found through optimization, ensuring the resulting covariance \( P \) is non-negative and the fusion process does not underestimate the uncertainty.
+
+
+\section{Graphical Interpretation}
+
+% \begin{figure}[htb]
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=8cm]{figs/CI.jpg}
+    \caption{Graphical representation of CI}
+    % \label{fig:enter-label}
+\end{figure}
+
+
+\begin{itemize}
+    \item Each source's estimate is represented by an ellipse, where the orientation and axes of the ellipse correspond to the covariance matrix of the estimate. This illustrates the uncertainty associated with each source.
+    \item The first ellipse, say \(\hat{x}_1\) with covariance \(P_1\), is drawn with a specific orientation and size, indicating its uncertainty.
+    \item The second ellipse, \(\hat{x}_2\) with covariance \(P_2\), overlaps with the first, showing the region where there could be potential agreement between the two sources.
+\end{itemize}
+
+
+The Covariance Intersection method produces:
+\begin{itemize}
+    \item A new ellipse that encompasses the overlapping area of the initial ellipses. This ellipse is neither too optimistic (smaller than the union) nor too conservative (larger than the intersection), striking a balance that reflects combined uncertainty without assuming correlations.
+    \item The optimal fused estimate, \(\hat{x}_{CI}\), and its covariance, \(P_{CI}\), are represented by this ellipse. The placement and size of this ellipse are determined by the weight \(\omega\), which balances the contribution of each source based on its uncertainty.
+\end{itemize}
+
+
+\section{Properties}
+
+Covariance Intersection is robust against inaccuracies in the correlation model between estimates, reducing the risk of overly optimistic state estimations that are a common pitfall in traditional fusion approaches. This method is particularly useful in scenarios with complex, unmodelled, or unknown correlations.
+
+\section{Applications}
+
+Covariance Intersection has broad applications in robotics, sensor networks, and aerospace engineering, where multiple sensor data must be fused reliably. It is also applied in financial models and other domains where managing uncertainty from diverse sources is critical.
+
+
+
+
+\chapter{Problem Formulation}
+Dividing the ground to discrete pieces and using a RLS algorithm , we intend to estimate  the orientation of each ground piece, and present normal vectors to each piece. 
+
+
+    \textbf{Input:} The input is a depth image \( D \) obtained from a stereo camera sensor. Each pixel in \( D \) denotes the distance from the sensor to the corresponding scene point.
+    
+     \textbf{Output:} The desired output is a normals map \( N \), where each pixel represents the normal vector of the surface at that location in 3D Cartesian coordinates.
+    
+     \textbf{Assumptions:}
+    \begin{itemize}
+        \item The ground is a continuous surface.
+    \end{itemize}
+    
+     \textbf{Estimation Method:} The project introduces an advanced method for estimating ground normals using recursive least squares. This approach iteratively refines the estimation of normals by adapting to the varying noise levels effectively. The process involves:
+    \begin{itemize}
+        \item Employing recursive least squares to iteratively refine the estimation of normals.
+        \item Using covariance intersection to integrate information from adjacent ground segments, under the continuity assumption of the ground.
+    \end{itemize}
+    
+     \textbf{Challenges:}
+    \begin{itemize}
+        \item Addressing the non-linearity of depth image noise which complicates the estimation process.
+        \item Ensuring accurate normals estimation in the presence of varying ground surfaces and depth discontinuities.
+        \item Integrating data from different ground segments without losing accuracy due to the varying noise levels.
+    \end{itemize}
+    
+
+
+
+\chapter{Literature Review}
+In the field of robotics and computer vision, estimating ground normals from depth images is a critical task for enhancing a robot's environmental perception. Several methods have been proposed to tackle this challenge, each with its own advantages and limitations.
+
+\begin{enumerate}
+    \item \textbf{Traditional Geometric Approaches:} These methods utilize geometric properties and relationships between points to estimate normals. For instance, the use of local plane fitting through techniques like Principal Component Analysis (PCA) has been widely studied. However, these methods often struggle with noisy data and non-linear depth errors, especially at greater distances.
+    
+    \item \textbf{Machine Learning Approaches:} With the advent of deep learning, several convolutional neural network (CNN) based approaches have been introduced. These methods learn to estimate normals directly from depth images, offering robustness against noise but requiring substantial training data and computational resources.
+    
+    \item \textbf{Hybrid Approaches:} Some studies combine geometric insights with machine learning to balance accuracy and efficiency. For example, using a CNN to guide the geometric fitting of planes can yield more precise normals even in challenging scenarios.
+\end{enumerate}
+
+Despite these advancements, accurately estimating ground normals in the presence of non-linear noise (proportional to the distance squared) remains a significant challenge. This noise introduces significant errors, especially at greater distances from the sensor, and complicates the integration of data from different ground segments.
+
+
+\chapter{Solution Method}
+
+To address the specific challenges identified in the literature review, our project proposes an innovative solution that leverages recursive least squares and covariance intersection. Here’s how the solution is structured:
+
+\begin{enumerate}
+    \item \textbf{Recursive Least Squares Estimation:} By adopting recursive least squares, our method iteratively refines the estimation of ground normals, effectively adapting to the varying levels of noise in the depth image. This approach allows for a dynamic update of the normal estimation as new depth data becomes available.
+    
+    \item \textbf{Covariance Intersection for Data Integration:} To integrate information from adjacent pieces of the ground under the continuity assumption, we employ covariance intersection. This technique ensures that information from neighboring ground segments is seamlessly combined without losing accuracy due to the varying noise levels.
+    
+    \item \textbf{Assumptions:}
+    \begin{itemize}
+        \item The noise in the depth image is non-linear and increases with the square of the distance from the sensor.
+        \item The ground surface is mostly continuous but may include minor irregularities.
+        \item The ground normals can be refined iteratively, allowing for an adaptive response to changing environmental conditions.
+    \end{itemize}
+    
+    \item \textbf{Validation Methods:}
+    \begin{itemize}
+        \item \textbf{Recorded Data:} Scenarios like a robot navigating over different ground surfaces will be set up, and depth data will be recorded for offline validation. Tools like "Rosbag" can be used to capture this data.
+        \item \textbf{Real-time Validation:} To ensure that the algorithm and its implementation are efficient enough for real-time applications, we will test the system in dynamic environments using live data from a stereo camera sensor.
+    \end{itemize}
+\end{enumerate}
+
+
+
+
+
+
+\chapter{Preliminary Results}
+
+\section{First Semester}
+
+Our results in the first semester were using the RLS algorithm to output the normals. Figure 7.1 shows the results.  
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{6cm}
+        \includegraphics[width=\linewidth]{figs/2.png}
+        \caption{}
+        % \label{fig:sub1}
+    \end{subfigure}
+    \begin{subfigure}[b]{6cm}
+        \includegraphics[width=\linewidth]{figs/3.png}
+        \caption{}
+        % \label{fig:sub2}
+    \end{subfigure}
+    \begin{subfigure}[b]{6cm}
+        \includegraphics[width=\linewidth]{figs/4.png}
+        \caption{}
+        % \label{fig:sub3}
+    \end{subfigure}
+    \caption{Output normals augmented to the image}
+    % \label{fig:combined}
+\end{figure}
+The output normals are augmented on one of the stereo cameras input for best visualization, red arrows presenting ground pieces that might be hazardous, and green arrows presenting pieces of ground that are not. As can be seen in the images of figure 7.1, most of the resulting normals truely represent the real normals to the ground , while others were defected due to noise, moreover the normals do not fully represent a continuous ground, figure 7.2 is figure 7.1(a) with several of those normals marked.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=8cm]{figs/marked1.png}
+    \caption{Marked non correct normals}
+    % \label{fig:enter-label}
+\end{figure}
+
+
+\section{Second Semester}
+
+The following is our results in the second semester using the RLS algorithm as in the first semeseter , and in addidition using CI to fuze information. Figure 7.3 shows the results.  
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{6cm}
+        \includegraphics[width=\linewidth]{figs/2nd1.png}
+        \caption{}
+        % \label{fig:sub1}
+    \end{subfigure}
+    \begin{subfigure}[b]{6cm}
+        \includegraphics[width=\linewidth]{figs/ba.png}
+        \caption{}
+        % \label{fig:sub2}
+    \end{subfigure}
+
+    \caption{Output normals augmented to the image}
+    % \label{fig:combined}
+\end{figure}
+As can be seen in the figures the change of two neighboring vectors is not sharp, as for a differentiable manifold the ground is assumed to be.
+Figure 7.4 show the difference between the results of the first and second semester.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{6cm}
+        \includegraphics[width=\linewidth]{figs/2nd1.png}
+        \caption{}
+        % \label{fig:sub1}
+    \end{subfigure}
+    \begin{subfigure}[b]{6cm}
+        \includegraphics[width=\linewidth]{figs/2.png}
+        \caption{}
+        % \label{fig:sub2}
+    \end{subfigure}
+
+    \caption{Output normals augmented to the image}
+    % \label{fig:combined}
+\end{figure}
+
+Besides the difference between the output vectors from the first and second semester, work has been done to achive better time performance, a performance of 60 Hz was achieved,meaning this algorithm can be used in real time.    
+
+\chapter{Project expenses}
+As in integral part of a project, it is necessary to estimate the expenses and budget
+invested in the project up to the current point – 26 weeks of work. The following
+tables shows the calculated expenses divided into two categories – the expenses for
+working hours and expenses of the hardware and products:
+
+\begin{table}[ht]
+\centering
+\caption{Working hours expenses}
+\label{tab:work_hours}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Subject                        & Hours/week & Total hours & ILS/Hour & Cost (ILS) \\ \midrule
+Preliminary tasks              & 1          & 13          & 40      & 520       \\
+Literature review              & 1          & 13          & 40      & 520      \\
+Formalization                  & 2          & 26          & 40      & 1040       \\
+Installations and preparation  & 1          & 13          & 40      & 520       \\
+Code development               & 3          & 79          & 40      & 3160      \\ \midrule
+\textbf{Total}                 & 8          & 104         & --      & 5720      \\ \bottomrule
+\end{tabular}
+\end{table}
+
+
+Detailed information about Table 8.1 may be found in the Gantt presented in chapter
+10.1.
+
+\begin{table}[ht]
+\centering
+\caption{Hardware expenses}
+\label{tab:work_hours}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Hardware                        & Cost (ILS) \\ \midrule
+Intel D455              & 1500                \\
+Intel T265              & 1500              \\
+Computer                  & 5000                 \\
+\textbf{Total}                 & 8000                \\ \bottomrule
+\end{tabular}
+\end{table}
+
+To conclude, the project’s estimated expenses after 26 working weeks are ~13,000 ILS.
+The project currently meets the budget, and from this point onward (for the summer
+and next semester) the main expected expenses are working hours. Therefore, this
+project is very money efficient and will pay off financially to any customer.
+
+
+\chapter{Conclusion}
+\label{chapter:conclusion}
+
+
+
+\addcontentsline{toc}{chapter}{Conclusion}
+This chapter encapsulates the progress made inthe project, focusing on the key achievements and challenges encountered. Initially, the research question was defined, with clear objectives and success indicators established to guide the project's direction. An extensive literature review was then conducted to acquire a robust mathematical foundation, essential for understanding and addressing the project's challenges. Following this, the proposed solution, leveraging the recursive least squares method, was introduced and implemented to refine ground normal estimation from depth images.
+
+The results showcased in the first semester demonstrate high accuracy in most scenarios. However, minor discrepancies were observed, attributed primarily to the not fully accounting for the continuity of the ground surface. The second semester was dedicated to account for the continuity using covariance intersection.
+
+The results showcased in the second semester demonstrated higher accuracy, in addition work has been done on achieving better runtime a total runtime of 15ms was achieved making the algorithm suitable for real time use.  
+
+
+% \chapter{Future Work}
+% \label{chapter:future_work}
+
+% The future work on this project will focus on the implementation of the covariance intersection method to enhance the robustness of ground normal estimation from depth images. This method will be used to integrate information from adjacent ground segments, addressing the continuity of the ground which was not fully accounted for in the initial phase.
+
+% The covariance intersection approach will allow for a conservative yet accurate estimation of ground normals without requiring explicit assumptions about the correlations between different ground segments. By adopting this method, the estimation model will be expanded to dynamically adapt to varying ground conditions and ensure more consistent results across different terrains.
+
+% When this is implemented, the system will be better equipped to handle complex environments where ground continuity and interaction between different segments significantly influence the accuracy of the normals. 
+% This advancement is expected to significantly enhance the system's ability to navigate and interpret complex and dynamic environments, setting the stage for further research and application in robotic navigation and environmental perception.
+
+% \addcontentsline{toc}{chapter}{Future Work}
+
+\vspace{1cm}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{figs/gantt.png}
+    \caption{Gantt}
+    % \label{fig:enter-label}
+\end{figure}
+
+
+% The parameter $\alpha=2$
+
+% \begin{equation}
+%     \alpha=2
+% \end{equation}
+
+% \begin{figure}[htb]
+% \centering
+% \includegraphics[width=8cm]{figs/1.jpg}
+% \caption{bla}
+
+% Or written \cite{or1}
+% somthing
+% % \begin{equation*}
+% % A = \pi
+% % \end{equation*}
+% \cite{linden2017finnfn}
+
+
+% \end{figure}
+
+\nocite{*}
+\bibliographystyle{plainnat}
+% \bibliography{project}
+\begin{thebibliography}{9}
+\bibitem{texbook}
+Haider A, Hel-Or H. What Can We Learn from Depth Camera Sensor Noise? Sensors (Basel). 2022 Jul 21;22(14):5448. doi: 10.3390/s22145448. PMID: 35891124; PMCID: PMC9321871.
+\bibitem{textbook}
+Hayes, Monson H. (1996). "9.4: Recursive Least Squares". Statistical Digital Signal Processing and Modeling. Wiley. p. 541. ISBN 0-471-59431-8.
+\bibitem{textbook}
+Simon Haykin, Adaptive Filter Theory, Prentice Hall, 2002, ISBN 0-13-048434-2
+\bibitem{textbook}
+Deng, Zili; Zhang, Peng; Qi, Wenjuan; Liu, Jinfang; Gao, Yuan (2012-04-15). "Sequential covariance intersection fusion Kalman filter". Information Sciences. 189: 293–309. doi:10.1016/j.ins.2011.11.038.
+\bibitem{Phd thesis}
+Novel Methods for Information Fusion in Networks Under Modeling Imperfections
+Tslil, O. (Author). 2022
+\bibitem{paper}
+Scharstein, D.,  Szeliski, R. (2002). A taxonomy and evaluation of dense two-frame stereo correspondence algorithms. International Journal of Computer Vision, 47(1-3), 7-42.
+\bibitem{paper}
+Lv, Jixin  Kobayashi, Yukinori  Emaru, Takanori  Ravankar, Ankit. (2017). Indoor Slope and Edge Detection by using Two-Dimensional EKF-SLAM with Orthogonal Assumption Regular Paper. International Journal of Advanced Robotic Systems. 10.5772/60407. 
+\bibitem{paper}
+Charnes, A.; Frome, E. L.; Yu, P. L. (1976). "The Equivalence of Generalized Least Squares and Maximum Likelihood Estimates in the Exponential Family". Journal of the American Statistical Association. 71 (353): 169–171. doi:10.1080/01621459.1976.10481508.
+
+\end{thebibliography}
+
+
+
+
+\end{document}

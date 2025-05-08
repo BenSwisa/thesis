@@ -13,15 +13,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "04_Templates/math.tpl.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "math.tpl"
+            }
+          },
+          {
+            "id": "cd19a3c6331bdff3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "tst.tex.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "tst.tex"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -142,13 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Untitled.md",
+                "file": "tst.tex.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Untitled"
+              "title": "Outline of tst.tex"
             }
           },
           {
@@ -160,13 +175,23 @@
               "icon": "lucide-file",
               "title": "Plugin no longer active"
             }
+          },
+          {
+            "id": "0cdc053fe328e1f5",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -180,25 +205,29 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "cc1bf6282a1ae589",
+  "active": "368d6a5c6a33f54e",
   "lastOpenFiles": [
-    "00_Inbox/tasks.md",
+    "03_Projects/lat/test.synctex(busy)",
+    "03_Projects/lat/pdflatex50888.fls",
+    "03_Projects/lat/pdflatex50884.fls",
+    "03_Projects/lat/test.aux",
+    "03_Projects/lat/pdflatex48610.fls",
+    "03_Projects/lat/pdflatex48606.fls",
+    "03_Projects/lat/pdflatex47611.fls",
+    "03_Projects/lat/pdflatex47607.fls",
+    "03_Projects/lat/pdflatex47260.fls",
+    "03_Projects/lat/test.log",
+    "03_Projects/lat/test.fls",
+    "04_Templates/math.tpl.md",
+    "tst.tex.md",
     "Task Dashboard.md",
-    "Untitled.md",
+    "2025-05-08.md",
     "README.md",
+    "00_Inbox/tasks.md",
     "Weekly Review Template.md",
-    "04_Templates/Untitled.md",
     "04_Templates/meeting.tpl.md",
     "04_Templates/test.tpl.md",
     "2025-05-08 Meeting.md.md",
-    "scripts/user.js",
-    "scripts/Untitled.md",
-    "scripts",
-    "05_Media",
-    "04_Templates",
-    "03_Projects",
-    "02_Literature",
-    "01_Meetings",
-    "00_Inbox"
+    "scripts/Untitled.md"
   ]
 }
