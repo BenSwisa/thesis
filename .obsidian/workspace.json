@@ -27,16 +27,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "tst.tex.md",
+                "file": "04_Templates/meeting.tpl.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "tst.tex"
+              "title": "meeting.tpl"
+            }
+          },
+          {
+            "id": "2a07ce00f3f35118",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Untitled.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Untitled"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -205,8 +219,13 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "368d6a5c6a33f54e",
+  "active": "2a07ce00f3f35118",
   "lastOpenFiles": [
+    "tst.tex.md",
+    "Untitled.md",
+    "TANGLED INTERACTIVE PROOFS 1.pdf",
+    "04_Templates/meeting.tpl.md",
+    "TANGLED INTERACTIVE PROOFS.pdf",
     "03_Projects/lat/test.synctex(busy)",
     "03_Projects/lat/pdflatex50888.fls",
     "03_Projects/lat/pdflatex50884.fls",
@@ -215,17 +234,12 @@
     "03_Projects/lat/pdflatex48606.fls",
     "03_Projects/lat/pdflatex47611.fls",
     "03_Projects/lat/pdflatex47607.fls",
-    "03_Projects/lat/pdflatex47260.fls",
-    "03_Projects/lat/test.log",
-    "03_Projects/lat/test.fls",
     "04_Templates/math.tpl.md",
-    "tst.tex.md",
     "Task Dashboard.md",
     "2025-05-08.md",
     "README.md",
     "00_Inbox/tasks.md",
     "Weekly Review Template.md",
-    "04_Templates/meeting.tpl.md",
     "04_Templates/test.tpl.md",
     "2025-05-08 Meeting.md.md",
     "scripts/Untitled.md"
