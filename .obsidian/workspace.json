@@ -35,8 +35,7 @@
               "title": "Untitled"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -205,23 +204,23 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "8fe7c4e36b9f73fa",
+  "active": "10ca04d2405e1825",
   "lastOpenFiles": [
-    "Task Dashboard.md",
     "Untitled.md",
+    "02_Literature/Strengths and Weaknesses of Quantum Computing.pdf",
+    "02_Literature/Efficient Quantum Algorithm for SUBSET-SUM Problem.pdf",
+    "02_Literature/Cosine Products.pdf",
+    "02_Literature/Subset sum and Knapsack problem using Fourier Analysis.pdf",
+    "02_Literature/A Near-Linear Pseudopolynomial Time Algorithm for Subset Sum.pdf",
+    "02_Literature/Solving the subset-sum problem.pdf",
+    "02_Literature/Faster Pseudopolynomial Time Algorithms for Subset Sum.pdf",
+    "Task Dashboard.md",
     "02_Literature/TANGLED INTERACTIVE PROOFS.pdf",
     "04_Templates/math.tpl.md",
     "04_Templates/meeting.tpl.md",
     "TANGLED INTERACTIVE PROOFS.pdf",
     "TANGLED INTERACTIVE PROOFS 1.pdf",
     "tst.tex.md",
-    "03_Projects/lat/test.synctex(busy)",
-    "03_Projects/lat/pdflatex50888.fls",
-    "03_Projects/lat/pdflatex50884.fls",
-    "03_Projects/lat/test.aux",
-    "03_Projects/lat/pdflatex48610.fls",
-    "03_Projects/lat/pdflatex48606.fls",
-    "03_Projects/lat/pdflatex47611.fls",
     "2025-05-08.md",
     "README.md",
     "00_Inbox/tasks.md",
