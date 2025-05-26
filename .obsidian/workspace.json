@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Task Dashboard.md",
+                "file": "Untitled.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Task Dashboard"
+              "title": "Untitled"
             }
           },
           {
@@ -206,6 +206,15 @@
   },
   "active": "10ca04d2405e1825",
   "lastOpenFiles": [
+    "05_Media/2025-05-12_2.png",
+    "05_Media/2025-05-12_4.png",
+    "05_Media/2025-05-12_3.png",
+    "05_Media/2025-05-12_1.png",
+    "05_Media/4.png",
+    "05_Media/3.png",
+    "05_Media/2.png",
+    "05_Media/1.png",
+    "Task Dashboard.md",
     "Untitled.md",
     "02_Literature/Strengths and Weaknesses of Quantum Computing.pdf",
     "02_Literature/Efficient Quantum Algorithm for SUBSET-SUM Problem.pdf",
@@ -214,7 +223,6 @@
     "02_Literature/A Near-Linear Pseudopolynomial Time Algorithm for Subset Sum.pdf",
     "02_Literature/Solving the subset-sum problem.pdf",
     "02_Literature/Faster Pseudopolynomial Time Algorithms for Subset Sum.pdf",
-    "Task Dashboard.md",
     "02_Literature/TANGLED INTERACTIVE PROOFS.pdf",
     "04_Templates/math.tpl.md",
     "04_Templates/meeting.tpl.md",
