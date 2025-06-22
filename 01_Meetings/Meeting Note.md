@@ -27,9 +27,9 @@
 - https://blog.computationalcomplexity.org/2007/02/on-np-in-bqp.html?utm_source=chatgpt.com
 - https://epubs.siam.org/doi/10.1137/S0097539796300933
 - https://arxiv.org/abs/2503.20090
+- https://chatgpt.com/share/68298d4a-cffc-8002-8d26-abb07257b6b1
 
 
 
 
 
-https://chatgpt.com/share/68298d4a-cffc-8002-8d26-abb07257b6b1
